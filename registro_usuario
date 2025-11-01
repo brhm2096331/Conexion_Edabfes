@@ -1,0 +1,42 @@
+#que miedo, hace mucho no programo, chequenlo bien porfas.
+import bcrypt
+import getpass
+import pyodbc
+
+def registrar_usuario(cursor, connection):
+#Función de registro, checamos que meta datos correctos y que no esten vacios.
+    print("\n--- Registro de Nuevo Usuario ---")
+    try:
+        usuario = input("Ingrese nuevo nombre de usuario: ")
+        correo = input("Ingrese correo electrónico: ")
+        password_plana = getpass.getpass("Ingrese contraseña: ")
+        password_confirm = getpass.getpass("Confirme la contraseña: ")
+
+        if not usuario or not correo or not password_plana:
+            print("Error: Usuario, correo y contraseña no pueden estar vacíos.")
+            return
+        if password_plana != password_confirm:
+            print("Error: Las contraseñas no coinciden.")
+            return
+        
+        #Hasheo de la contraseña.
+        salt = bcrypt.gensalt()
+        password_hashed = bcrypt.hashpw(password_plana.encode('utf-8'), salt)
+
+        #Metemos los datios en la bd.
+        query = "INSERT INTO Usuario (Usuario, Correo, Contraseña) VALUES (?, ?, ?)"
+        values = (usuario, correo, password_hashed.decode('utf-8'))
+        cursor.execute(query, values)
+        connection.commit() 
+        print(f"\n¡Usuario '{usuario}' registrado exitosamente!")
+
+    except pyodbc.IntegrityError as e:
+        # Error de que el usuario o correo ya existen
+        if 'UNIQUE KEY' in str(e): 
+            print(f"Error: El nombre de usuario o el correo electrónico ya existen.")
+        else:
+            print(f"Error de integridad al registrar: {e}")
+    except pyodbc.Error as e:
+        print(f"Error en la base de datos: {e}")
+    except Exception as e:
+        print(f"Ocurrió un error inesperado: {e}")
