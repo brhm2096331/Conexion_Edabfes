@@ -1,4 +1,5 @@
 #que miedo, hace mucho no programo, chequenlo bien porfas.
+# hola abrham soy del futuro, ya revise el codigo y esta bien, no te preocupes
 import bcrypt
 import getpass
 import pyodbc

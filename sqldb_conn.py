@@ -23,5 +23,12 @@ def create_connection():
     except pyodbc.Error as e:
         # print("Error", e) for tests x2
         return None
+
+def close_connection(conn):
+    if conn is not None: # check if conn is active
+        try:
+            conn.close()
+        except pyodbc.Error:
+            pass
     
 # create_connection() uncommented for testing purposes :D
