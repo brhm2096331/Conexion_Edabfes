@@ -1,8 +1,9 @@
+import os
+import sys
+import bcrypt
 import tkinter as tk
 from tkinter import messagebox
 from sqldb_conn import create_connection, close_connection
-import bcrypt
-
 
 def iniciar_sesion():
     user = entry_user.get().strip()
@@ -41,11 +42,17 @@ def iniciar_sesion():
         close_connection(conn)
 
 
+def volver_al_menu():
+    """Cierra esta ventana y regresa al menú principal"""
+    ventana.destroy()
+    os.system(f"{sys.executable} menu_principal.py")
+
+
 # ======== Interfaz gráfica ========
 
 ventana = tk.Tk()
 ventana.title("Inicio de sesión")
-ventana.geometry("420x280")
+ventana.geometry("420x320")
 ventana.config(bg="#f5f7fb")
 ventana.resizable(False, False)
 
@@ -83,5 +90,19 @@ btn_login = tk.Button(
 )
 btn_login.pack(pady=25)
 
+btn_volver = tk.Button(
+    ventana,
+    text="Volver al menú",
+    bg="#6C757D",
+    fg="white",
+    font=("Segoe UI", 10, "bold"),
+    relief="flat",
+    padx=10,
+    pady=5,
+    command=volver_al_menu
+)
+btn_volver.pack(pady=5)
+
 ventana.mainloop()
+
 
