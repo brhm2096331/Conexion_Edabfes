@@ -16,7 +16,7 @@ def delete_user():
         cursor = conn.cursor()
 
         #Se verifica si el user existe en la base de datos
-        cursor.execute("SELECT user FROM user WHERE user = ?", (user,))
+        cursor.execute("SELECT Usuario FROM Usuario WHERE Usuario = ?", (user,))
         fila = cursor.fetchone()
 
         if not fila:
@@ -90,3 +90,4 @@ btn_volver = tk.Button(
 btn_volver.pack(pady=5)
 
 ventana.mainloop()
+
