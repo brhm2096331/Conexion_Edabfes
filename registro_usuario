@@ -1,3 +1,5 @@
+import os
+import sys
 import tkinter as tk
 from tkinter import messagebox
 import bcrypt
@@ -62,6 +64,10 @@ def limpiar_campos():
     entry_contraseña.delete(0, tk.END)
     entry_confirmar.delete(0, tk.END)
 
+def volver_al_menu():
+    """Cierra esta ventana y regresa al menú principal"""
+    ventana.destroy()
+    os.system(f"{sys.executable} menu_principal.py")
 
 # ====== Interfaz gráfica ======
 
@@ -102,5 +108,18 @@ btn_registrar = tk.Button(
     command=registrar_usuario
 )
 btn_registrar.pack(pady=20)
+
+btn_volver = tk.Button(
+    ventana,
+    text="Volver al menú",
+    bg="#6C757D",
+    fg="white",
+    font=("Segoe UI", 10, "bold"),
+    relief="flat",
+    padx=10,
+    pady=5,
+    command=volver_al_menu
+)
+btn_volver.pack(pady=5)
 
 ventana.mainloop()
