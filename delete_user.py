@@ -1,3 +1,5 @@
+import os
+import sys
 import tkinter as tk
 from tkinter import messagebox
 from sqldb_conn import create_connection, close_connection
@@ -46,6 +48,11 @@ def delete_user():
     finally:
         close_connection(conn)
 
+def volver_al_menu():
+    """Cierra esta ventana y regresa al menú principal"""
+    ventana.destroy()
+    os.system(f"{sys.executable} menu_principal.py") #Se cambia al final por el nombre del archivo del menú
+
 ventana = tk.Tk()
 ventana.title("Eliminar user")
 ventana.geometry("400x250")
@@ -68,5 +75,18 @@ btn_eliminar = tk.Button(ventana, text="Eliminar user", bg="#e63946", fg="white"
                          font=("Segoe UI", 11, "bold"), relief="flat", padx=10, pady=5,
                          command=delete_user)
 btn_eliminar.pack(pady=20)
+
+btn_volver = tk.Button(
+    ventana,
+    text="Volver al menú",
+    bg="#6C757D",
+    fg="white",
+    font=("Segoe UI", 10, "bold"),
+    relief="flat",
+    padx=10,
+    pady=5,
+    command=volver_al_menu
+)
+btn_volver.pack(pady=5)
 
 ventana.mainloop()
