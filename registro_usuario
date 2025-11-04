@@ -91,7 +91,7 @@ entries = []
 
 for i, text in enumerate(labels):
     tk.Label(frame, text=text, bg="#f5f7fb", font=("Segoe UI", 11)).grid(row=i, column=0, sticky="e", padx=5, pady=5)
-    entry = tk.Entry(frame, width=30, font=("Segoe UI", 10), show="*" if "Contraseña" and "Confirmar" in text else "")
+    entry = tk.Entry(frame, width=30, font=("Segoe UI", 10), show="*" if "Contraseña" or "Confirmar" in text else "")
     entry.grid(row=i, column=1, padx=5, pady=5)
     entries.append(entry)
 
