@@ -1,43 +1,106 @@
-#que miedo, hace mucho no programo, chequenlo bien porfas.
-# hola abrham soy del futuro, ya revise el codigo y esta bien, no te preocupes
+import tkinter as tk
+from tkinter import messagebox
 import bcrypt
-import getpass
 import pyodbc
+from sqldb_conn import create_connection, close_connection
 
-def registrar_usuario(cursor, connection):
-#Función de registro, checamos que meta datos correctos y que no esten vacios.
-    print("\n--- Registro de Nuevo Usuario ---")
+
+def registrar_usuario():
+    usuario = entry_usuario.get().strip()
+    nombre = entry_nombre.get().strip()
+    apellido = entry_apellido.get().strip()
+    correo = entry_correo.get().strip()
+    telefono = entry_telefono.get().strip()
+    password_plana = entry_contraseña.get().strip()
+    password_confirm = entry_confirmar.get().strip()
+
+    # Validaciones básicas
+    if not usuario or not correo or not password_plana:
+        messagebox.showwarning("Campos obligatorios", "Usuario, correo y contraseña no pueden estar vacíos.")
+        return
+    if password_plana != password_confirm:
+        messagebox.showerror("Error", "Las contraseñas no coinciden.")
+        return
+
     try:
-        usuario = input("Ingrese nuevo nombre de usuario: ")
-        correo = input("Ingrese correo electrónico: ")
-        password_plana = getpass.getpass("Ingrese contraseña: ")
-        password_confirm = getpass.getpass("Confirme la contraseña: ")
+        conn = create_connection()
+        cursor = conn.cursor()
 
-        if not usuario or not correo or not password_plana:
-            print("Error: Usuario, correo y contraseña no pueden estar vacíos.")
-            return
-        if password_plana != password_confirm:
-            print("Error: Las contraseñas no coinciden.")
-            return
-        
-        #Hasheo de la contraseña.
+        # Hasheo de contraseña
         salt = bcrypt.gensalt()
         password_hashed = bcrypt.hashpw(password_plana.encode('utf-8'), salt)
 
-        #Metemos los datios en la bd.
-        query = "INSERT INTO Usuario (Usuario, Correo, Contraseña) VALUES (?, ?, ?)"
-        values = (usuario, correo, password_hashed.decode('utf-8'))
+        # Inserción
+        query = """
+        INSERT INTO Usuario (Usuario, Nombre, Apellido, Contraseña, Correo, Telefono)
+        VALUES (?, ?, ?, ?, ?, ?)
+        """
+        values = (usuario, nombre, apellido, password_hashed.decode('utf-8'), correo, telefono)
         cursor.execute(query, values)
-        connection.commit() 
-        print(f"\n¡Usuario '{usuario}' registrado exitosamente!")
+        conn.commit()
+
+        messagebox.showinfo("Éxito", f"✅ ¡Usuario '{usuario}' registrado exitosamente!")
+        limpiar_campos()
 
     except pyodbc.IntegrityError as e:
-        # Error de que el usuario o correo ya existen
-        if 'UNIQUE KEY' in str(e): 
-            print(f"Error: El nombre de usuario o el correo electrónico ya existen.")
+        if 'UNIQUE KEY' in str(e):
+            messagebox.showerror("Error", "El nombre de usuario o correo electrónico ya existen.")
         else:
-            print(f"Error de integridad al registrar: {e}")
-    except pyodbc.Error as e:
-        print(f"Error en la base de datos: {e}")
+            messagebox.showerror("Error de integridad", f"Ocurrió un error: {e}")
     except Exception as e:
-        print(f"Ocurrió un error inesperado: {e}")
+        messagebox.showerror("Error inesperado", f"Ocurrió un error: {e}")
+    finally:
+        close_connection(conn)
+
+
+def limpiar_campos():
+    entry_usuario.delete(0, tk.END)
+    entry_nombre.delete(0, tk.END)
+    entry_apellido.delete(0, tk.END)
+    entry_correo.delete(0, tk.END)
+    entry_telefono.delete(0, tk.END)
+    entry_contraseña.delete(0, tk.END)
+    entry_confirmar.delete(0, tk.END)
+
+
+# ====== Interfaz gráfica ======
+
+ventana = tk.Tk()
+ventana.title("Registro de usuario")
+ventana.geometry("500x500")
+ventana.config(bg="#f5f7fb")
+ventana.resizable(False, False)
+
+titulo = tk.Label(
+    ventana, text="📝 Registro de nuevo usuario",
+    font=("Segoe UI", 18, "bold"), bg="#f5f7fb", fg="#2f4f4f"
+)
+titulo.pack(pady=20)
+
+frame = tk.Frame(ventana, bg="#f5f7fb")
+frame.pack(pady=10)
+
+labels = ["Usuario:", "Nombre:", "Apellido:", "Correo:", "Teléfono:", "Contraseña:", "Confirmar contraseña:"]
+entries = []
+
+for i, text in enumerate(labels):
+    tk.Label(frame, text=text, bg="#f5f7fb", font=("Segoe UI", 11)).grid(row=i, column=0, sticky="e", padx=5, pady=5)
+    entry = tk.Entry(frame, width=30, font=("Segoe UI", 10), show="*" if "Contraseña" and "Confirmar" in text else "")
+    entry.grid(row=i, column=1, padx=5, pady=5)
+    entries.append(entry)
+
+entry_usuario, entry_nombre, entry_apellido, entry_correo, entry_telefono, entry_contraseña, entry_confirmar = entries
+
+# Botón registrar
+btn_registrar = tk.Button(
+    ventana,
+    text="Registrar usuario",
+    bg="#28A745", fg="white",
+    font=("Segoe UI", 11, "bold"),
+    relief="flat",
+    padx=10, pady=6,
+    command=registrar_usuario
+)
+btn_registrar.pack(pady=20)
+
+ventana.mainloop()
