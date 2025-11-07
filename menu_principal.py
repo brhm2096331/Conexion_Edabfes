@@ -54,74 +54,81 @@ def exit_from_menu():
 
 ventana_menu = tk.Tk()
 ventana_menu.title("Menú Principal")
-ventana_menu.geometry("400x350")
-ventana_menu.config(bg="#f0f0f0")
+ventana_menu.geometry("400x400")
+ventana_menu.config(bg="#FFEBF7")
 
 # Tittle for the menu window
 titulo = tk.Label(
     ventana_menu,
     text="Menú Principal",
-    font=("Segoe UI", 18, "bold"),
-    bg="#f0f0f0",
-    fg="#333",
+    font=("Century Gothic", 20, "bold"),
+    bg="#FFEBF7",
+    fg="#880E4F",
 )
 titulo.pack(pady=15)
-
-# Button to the user login window
-btn_ir_a_login = tk.Button(
-    ventana_menu,
-    text="Iniciar Sesión",
-    bg="#0078D7",
-    fg="white",
-    font=("Segoe UI", 12, "bold"),
-    relief="flat",
-    padx=20,
-    pady=8,
-    command=login_user
-)
-btn_ir_a_login.pack(pady=8)
 
 # Button to the user registration window
 btn_ir_a_login = tk.Button(
     ventana_menu,
     text="Registrar usuario",
-    bg="#0078D7",
-    fg="white",
-    font=("Segoe UI", 12, "bold"),
+    width=12,
+    bg="#FF5AA4", 
+    fg="white", 
+    activebackground="#C2185B",
+    font=("Century Gothic", 12, "bold"),
     relief="flat",
     padx=20,
-    pady=8,
+    pady=10,
     command=user_registration
 )
-btn_ir_a_login.pack(pady=8)
+btn_ir_a_login.pack(pady=10)
+
+# Button to the user login window
+btn_ir_a_login = tk.Button(
+    ventana_menu,
+    text="Iniciar Sesión",
+    width=12,
+    bg="#FF5AA4", 
+    fg="white", 
+    activebackground="#C2185B",
+    font=("Century Gothic", 12, "bold"),
+    relief="flat",
+    padx=20,
+    pady=10,
+    command=login_user
+)
+btn_ir_a_login.pack(pady=10)
 
 # Button to the user elimination window
 btn_ir_a_login = tk.Button(
     ventana_menu,
     text="Borrar Usuario",
-    bg="#0078D7",
-    fg="white",
-    font=("Segoe UI", 12, "bold"),
+    width=12,
+    bg="#FF5AA4", 
+    fg="white", 
+    activebackground="#C2185B",
+    font=("Century Gothic", 12, "bold"),
     relief="flat",
     padx=20,
-    pady=8,
+    pady=10,
     command=delete_user
 )
-btn_ir_a_login.pack(pady=8)
+btn_ir_a_login.pack(pady=10)
 
 # Button to exit the menu
 btn_salir = tk.Button(
     ventana_menu,
     text="Salir",
-    bg="#dc3545",
+    bg="#F70071",
     fg="white",
-    font=("Segoe UI", 12, "bold"),
+    activebackground="#C2185B",
+    font=("Century Gothic", 12, "bold"),
     relief="flat",
     padx=12,
-    pady=5,
+    pady=10,
     command=exit_from_menu
 )
-btn_salir.pack(pady=10)
+btn_salir.pack(pady=15)
 
 ventana_menu.mainloop()
 
