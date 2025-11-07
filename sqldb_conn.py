@@ -13,7 +13,7 @@ def create_connection():
 
     try:
         conn = pyodbc.connect(
-        f'DRIVER={{ODBC Driver 17 for SQL Server}};SERVER={server};\
+            f'DRIVER={{ODBC Driver 17 for SQL Server}};SERVER={server};\
             DATABASE={database}; UID={username};Trusted_Connection=yes;'
         )
 

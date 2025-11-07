@@ -1,10 +1,51 @@
 import os
 import sys
+import re
 import tkinter as tk
 from tkinter import messagebox
 import bcrypt
 import pyodbc
 from sqldb_conn import create_connection, close_connection
+
+
+def validar_correo(correo):
+    """Valida formato básico de correo electrónico."""
+    patron = r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$'
+    return bool(re.match(patron, correo))
+
+
+def validar_contraseña(password):
+    """Valida que la contraseña cumpla requisitos mínimos de seguridad."""
+    if len(password) < 8:
+        return False, "La contraseña debe tener al menos 8 caracteres"
+    if not re.search(r'[A-Z]', password):
+        return False, "La contraseña debe tener al menos una mayúscula"
+    if not re.search(r'[a-z]', password):
+        return False, "La contraseña debe tener al menos una minúscula"
+    if not re.search(r'\d', password):
+        return False, "La contraseña debe tener al menos un número"
+    if not re.search(r'[!@#$%^&*(),.?":{}|<>]', password):
+        return False, "La contraseña debe tener al menos un carácter especial"
+    return True, ""
+
+
+def validar_nombre(nombre):
+    """Valida que el nombre solo contenga letras y espacios."""
+    return bool(re.match(r'^[a-zA-ZáéíóúÁÉÍÓÚüÜñÑ\s]{2,50}$', nombre))
+
+
+def validar_telefono(telefono):
+    """Valida formato básico de número telefónico (10 dígitos)."""
+    return bool(re.match(r'^\d{10}$', telefono))
+
+
+def validar_usuario(usuario):
+    """Valida formato de nombre de usuario (letras, números, guiones, sin espacios)."""
+    if len(usuario) < 4:
+        return False, "El usuario debe tener al menos 4 caracteres"
+    if not re.match(r'^[a-zA-Z0-9_-]+$', usuario):
+        return False, "El usuario solo puede contener letras, números, guiones y guiones bajos"
+    return True, ""
 
 
 def registrar_usuario():
@@ -20,12 +61,47 @@ def registrar_usuario():
     if not usuario or not correo or not password_plana:
         messagebox.showwarning("Campos obligatorios", "Usuario, correo y contraseña no pueden estar vacíos.")
         return
+
+    # Validar usuario
+    usuario_valido, msg_usuario = validar_usuario(usuario)
+    if not usuario_valido:
+        messagebox.showerror("Error", msg_usuario)
+        return
+
+    # Validar correo
+    if not validar_correo(correo):
+        messagebox.showerror("Error", "El formato del correo electrónico no es válido.")
+        return
+
+    # Validar nombre y apellido si no están vacíos
+    if nombre and not validar_nombre(nombre):
+        messagebox.showerror("Error", "El nombre solo puede contener letras.")
+        return
+    if apellido and not validar_nombre(apellido):
+        messagebox.showerror("Error", "El apellido solo puede contener letras.")
+        return
+
+    # Validar teléfono si no está vacío
+    if telefono and not validar_telefono(telefono):
+        messagebox.showerror("Error", "El teléfono debe tener 10 dígitos numéricos.")
+        return
+
+    # Validar contraseña
     if password_plana != password_confirm:
         messagebox.showerror("Error", "Las contraseñas no coinciden.")
         return
+    
+    password_valida, msg_password = validar_contraseña(password_plana)
+    if not password_valida:
+        messagebox.showerror("Error", msg_password)
+        return
 
+    conn = None
     try:
         conn = create_connection()
+        if conn is None:
+            messagebox.showerror("Error de conexión", "No se pudo conectar a la base de datos. Intente de nuevo más tarde.")
+            return
         cursor = conn.cursor()
 
         # Hasheo de contraseña
@@ -41,7 +117,7 @@ def registrar_usuario():
         cursor.execute(query, values)
         conn.commit()
 
-        messagebox.showinfo("Éxito", f"✅ ¡Usuario '{usuario}' registrado exitosamente!")
+        messagebox.showinfo("Éxito", f"¡Usuario '{usuario}' registrado exitosamente!")
         limpiar_campos()
 
     except pyodbc.IntegrityError as e:

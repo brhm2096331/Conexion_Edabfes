@@ -11,39 +11,45 @@ def delete_user():
         messagebox.showwarning("Advertencia", "Por favor, ingrese el nombre de user a eliminar")
         return
 
+    conn = None
     try:
         conn = create_connection()
+        if conn is None:
+            messagebox.showerror("Error de conexión", "No se pudo conectar a la base de datos.")
+            return
         cursor = conn.cursor()
 
-        #Se verifica si el user existe en la base de datos
+        # Se verifica si el user existe en la base de datos (tabla/columna Usuario)
         cursor.execute("SELECT Usuario FROM Usuario WHERE Usuario = ?", (user,))
         fila = cursor.fetchone()
 
         if not fila:
-            messagebox.showinfo("user no encontrado", f'El user {user} no existe en la BD')
+            messagebox.showinfo("Usuario no encontrado", f'El usuario {user} no existe en la BD')
             return
 
-        #Se confirma si se desea eliminar el user
+        # Se confirma si se desea eliminar el user
         confirm = messagebox.askyesno("Confirmar eliminación",
-                                      f"¿Está seguro que desea elminar al user {user}?")
+                                      f"¿Está seguro que desea eliminar al usuario {user}?")
         
         if not confirm:
             messagebox.showinfo("Cancelado", "La operación fue cancelada")
             return
         
-        #Se elimina el user de la base de datos
-        cursor.execute("DELETE FROM user WHERE user = ?", (user,))
+        # Se elimina el user de la base de datos (usar tabla/columna Usuario)
+        cursor.execute("DELETE FROM Usuario WHERE Usuario = ?", (user,))
         conn.commit()
 
-        messagebox.showinfo("Exito", f"Usario {user} eliminado con exito")
+        messagebox.showinfo("Éxito", f"Usuario {user} eliminado con éxito")
         entry_user.delete(0, tk.END)
 
     except Exception as e:
-        conn.rollback()
-        messagebox.showerror("Error", f"Error al eliminar el usario:\n {e}")
-
-    except Exception as e:
-        messagebox.showerror("Error", f"Ocurrió un error inesperado:\n {e}")
+        # Si hay conexión activa, revertir
+        if conn is not None:
+            try:
+                conn.rollback()
+            except Exception:
+                pass
+        messagebox.showerror("Error", f"Error al eliminar el usuario:\n {e}")
 
     finally:
         close_connection(conn)

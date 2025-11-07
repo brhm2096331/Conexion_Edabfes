@@ -3,24 +3,46 @@
 import tkinter as tk
 import os
 import sys
+from tkinter import messagebox
+
+
+def _safe_launch(script_name):
+    # ejecuta script_name de forma segura
+    try:
+        # sys.executable para mantener el mismo intérprete
+        cmd = f"{sys.executable} {script_name}"
+        rc = os.system(cmd)
+        if rc != 0:
+            messagebox.showerror("Error al abrir ventana", "No se pudo abrir la ventana solicitada.")
+    except Exception as e:
+        messagebox.showerror("Error inesperado", "No se pudo abrir la ventana. Revise la consola para más detalles.")
 
 
 def login_user():
     """Navigate to the login window."""
-    ventana_menu.destroy()
-    os.system(f"{sys.executable} login.py")
+    try:
+        ventana_menu.destroy()
+        _safe_launch("login.py")
+    except Exception as e:
+        messagebox.showerror("Error", "No se pudo ir a Iniciar Sesión.")
 
 
 def user_registration():
     """Navigate to the user registration window."""
-    ventana_menu.destroy()
-    os.system(f"{sys.executable} registro_usuario.py")
+    try:
+        ventana_menu.destroy()
+        _safe_launch("registro_usuario.py")
+    except Exception as e:
+        messagebox.showerror("Error", "No se pudo ir a Registrar usuario.")
 
 
 def delete_user():
     """Navigate to the user deletion window."""
-    ventana_menu.destroy()
-    os.system(f"{sys.executable} delete_user.py")
+    try:
+        ventana_menu.destroy()
+        _safe_launch("delete_user.py")
+    except Exception as e:
+        messagebox.showerror("Error", "No se pudo ir a Borrar usuario.")
 
 
 def exit_from_menu():

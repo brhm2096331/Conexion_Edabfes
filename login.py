@@ -13,11 +13,16 @@ def iniciar_sesion():
         messagebox.showwarning("Campos vacíos", "Por favor, ingrese su user/correo y contraseña.")
         return
 
+    conn = None
     try:
         conn = create_connection()
+        if conn is None:
+            messagebox.showerror("Error de conexión", "No se pudo conectar a la base de datos.")
+            return
         cursor = conn.cursor()
 
-        query = "SELECT user, Correo, Contraseña FROM user WHERE user = ? OR Correo = ?"
+        # Usar los mismos nombres de tabla/columnas que en el registro (Usuario)
+        query = "SELECT Usuario, Correo, Contraseña FROM Usuario WHERE Usuario = ? OR Correo = ?"
         cursor.execute(query, (user, user))
         fila = cursor.fetchone()
 
@@ -29,11 +34,11 @@ def iniciar_sesion():
 
         # Verifica contraseña con bcrypt
         if bcrypt.checkpw(password.encode('utf-8'), password_db.encode('utf-8')):
-            messagebox.showinfo("Inicio de sesión exitoso", f"✅ Bienvenido {user_db}")
+            messagebox.showinfo("Inicio de sesión exitoso", f"Bienvenido {user_db}")
             entry_user.delete(0, tk.END)
             entry_contraseña.delete(0, tk.END)
         else:
-            messagebox.showerror("Error", "❌ Contraseña incorrecta.")
+            messagebox.showerror("Error", "Contraseña incorrecta.")
 
     except Exception as e:
         messagebox.showerror("Error", f"Ocurrió un error durante el inicio de sesión:\n{e}")
