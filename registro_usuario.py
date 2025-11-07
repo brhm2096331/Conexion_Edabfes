@@ -150,24 +150,29 @@ def volver_al_menu():
 ventana = tk.Tk()
 ventana.title("Registro de usuario")
 ventana.geometry("500x500")
-ventana.config(bg="#f5f7fb")
+ventana.config(bg="#FFEBF7")
 ventana.resizable(False, False)
 
 titulo = tk.Label(
-    ventana, text="📝 Registro de nuevo usuario",
-    font=("Segoe UI", 18, "bold"), bg="#f5f7fb", fg="#2f4f4f"
+    ventana, text="Registro de nuevo usuario",
+    font=("Century Gothic", 20, "bold"), 
+    bg="#FFEBF7", fg="#880E4F"
 )
 titulo.pack(pady=20)
 
-frame = tk.Frame(ventana, bg="#f5f7fb")
+frame = tk.Frame(ventana, bg="#FFEBF7")
 frame.pack(pady=10)
 
-labels = ["Usuario:", "Nombre:", "Apellido:", "Correo:", "Teléfono:", "Contraseña:", "Confirmar contraseña:"]
+labels = ["Usuario:", "Nombre:", "Apellido:", 
+          "Correo:", "Teléfono:", "Contraseña:",
+          "Confirmar contraseña:"]
 entries = []
 
 for i, text in enumerate(labels):
-    tk.Label(frame, text=text, bg="#f5f7fb", font=("Segoe UI", 11)).grid(row=i, column=0, sticky="e", padx=5, pady=5)
-    entry = tk.Entry(frame, width=30, font=("Segoe UI", 10), show="*" if "Contraseña" in text or  "Confirmar" in text else "")
+    tk.Label(frame, text=text, bg="#FFEBF7", 
+             font=("Century Gothic", 11)).grid(row=i, column=0, sticky="e", padx=5, pady=5)
+    entry = tk.Entry(frame, width=30, font=("Century Gothic", 10), 
+                     show="*" if "Contraseña" in text or  "Confirmar" in text else "")
     entry.grid(row=i, column=1, padx=5, pady=5)
     entries.append(entry)
 
@@ -177,8 +182,9 @@ entry_usuario, entry_nombre, entry_apellido, entry_correo, entry_telefono, entry
 btn_registrar = tk.Button(
     ventana,
     text="Registrar usuario",
-    bg="#28A745", fg="white",
-    font=("Segoe UI", 11, "bold"),
+    bg="#FF5AA4", fg="white", 
+    activebackground="#C2185B",
+    font=("Century Gothic", 11, "bold"),
     relief="flat",
     padx=10, pady=6,
     command=registrar_usuario
@@ -188,9 +194,10 @@ btn_registrar.pack(pady=20)
 btn_volver = tk.Button(
     ventana,
     text="Volver al menú",
-    bg="#6C757D",
+    bg="#F70071",
     fg="white",
-    font=("Segoe UI", 10, "bold"),
+    activebackground="#C2185B",
+    font=("Century Gothic", 10, "bold"),
     relief="flat",
     padx=10,
     pady=5,
