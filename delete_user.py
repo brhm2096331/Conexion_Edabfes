@@ -32,14 +32,16 @@ def delete_user():
                                       f"¿Está seguro que desea eliminar al usuario {user}?")
         
         if not confirm:
-            messagebox.showinfo("Cancelado", "La operación fue cancelada")
+            messagebox.showinfo("Cancelado", 
+                                "La operación fue cancelada")
             return
         
-        # Se elimina el user de la base de datos (usar tabla/columna Usuario)
+        # Se elimina el usuario de la base de datos (usar tabla/columna Usuario)
         cursor.execute("DELETE FROM Usuario WHERE Usuario = ?", (user,))
         conn.commit()
 
-        messagebox.showinfo("Éxito", f"Usuario {user} eliminado con éxito")
+        messagebox.showinfo("Éxito", 
+                            f"Usuario {user} eliminado con éxito")
         entry_user.delete(0, tk.END)
 
     except Exception as e:
@@ -49,7 +51,8 @@ def delete_user():
                 conn.rollback()
             except Exception:
                 pass
-        messagebox.showerror("Error", f"Error al eliminar el usuario:\n {e}")
+        messagebox.showerror("Error", 
+                             f"Error al eliminar el usuario:\n {e}")
 
     finally:
         close_connection(conn)
@@ -57,37 +60,48 @@ def delete_user():
 def volver_al_menu():
     """Cierra esta ventana y regresa al menú principal"""
     ventana.destroy()
-    os.system(f"{sys.executable} menu_principal.py") #Se cambia al final por el nombre del archivo del menú
+    os.system(f"{sys.executable} menu_principal.py") 
 
 ventana = tk.Tk()
-ventana.title("Eliminar user")
-ventana.geometry("400x250")
-ventana.config(bg="#f5f7fb")
+ventana.title("Eliminar usuario")
+ventana.geometry("400x300")
+ventana.config(bg="#FFEBF7")
 ventana.resizable(False, False)
 
-titulo = tk.Label(ventana, text="Eliminar user", font=("Segoe UI", 16, "bold"), bg="#f5f7fb", fg="#2f4f4f")
+titulo = tk.Label(ventana, 
+                  text="Eliminar usuario", 
+                  font=("Century Gothic", 20, "bold"), 
+                  bg="#FFEBF7", fg="#880E4F")
 titulo.pack(pady=20)
 
-frame = tk.Frame(ventana, bg="#f5f7fb")
+frame = tk.Frame(ventana, bg="#FFEBF7")
 frame.pack(pady=10)
 
-label_user = tk.Label(frame, text="Nombre de user:", bg="#f5f7fb", font=("Segoe UI", 11))
+label_user = tk.Label(frame, 
+                      text="Nombre de usuario:", 
+                      bg="#FFEBF7", 
+                      font=("Century Gothic", 11))
 label_user.grid(row=0, column=0, padx=5, pady=5)
 
-entry_user = tk.Entry(frame, width=30, font=("Segoe UI", 10))
+entry_user = tk.Entry(frame, width=30, font=("Century Gothic", 10))
 entry_user.grid(row=0, column=1, padx=5, pady=5)
 
-btn_eliminar = tk.Button(ventana, text="Eliminar user", bg="#e63946", fg="white",
-                         font=("Segoe UI", 11, "bold"), relief="flat", padx=10, pady=5,
-                         command=delete_user)
+btn_eliminar = tk.Button(
+    ventana, text="Eliminar usuario", 
+    bg="#FF5AA4", fg="white", 
+    activebackground="#C2185B",
+    font=("Century Gothic", 11, "bold"), 
+    relief="flat", padx=10, pady=5,
+    command=delete_user)
 btn_eliminar.pack(pady=20)
 
 btn_volver = tk.Button(
     ventana,
     text="Volver al menú",
-    bg="#6C757D",
+    bg="#F70071",
     fg="white",
-    font=("Segoe UI", 10, "bold"),
+    activebackground="#C2185B",
+    font=("Century Gothic", 10, "bold"),
     relief="flat",
     padx=10,
     pady=5,
@@ -96,4 +110,6 @@ btn_volver = tk.Button(
 btn_volver.pack(pady=5)
 
 ventana.mainloop()
+
+
 
