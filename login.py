@@ -57,37 +57,39 @@ def volver_al_menu():
 
 ventana = tk.Tk()
 ventana.title("Inicio de sesión")
-ventana.geometry("420x320")
-ventana.config(bg="#f5f7fb")
+ventana.geometry("400x400")
+ventana.config(bg="#FFEBF7")
 ventana.resizable(False, False)
 
 titulo = tk.Label(
     ventana, text="Inicio de sesión",
-    font=("Segoe UI", 18, "bold"),
-    bg="#f5f7fb", fg="#2f4f4f"
+    font=("Century Gothic", 20, "bold"),
+    bg="#FFEBF7", fg="#880E4F"
 )
 titulo.pack(pady=20)
 
-frame = tk.Frame(ventana, bg="#f5f7fb")
+frame = tk.Frame(ventana, bg="#FFEBF7")
 frame.pack(pady=10)
 
 # user/correo
-tk.Label(frame, text="Usuario o correo:", bg="#f5f7fb", font=("Segoe UI", 11)).grid(row=0, column=0, padx=5, pady=5, sticky="e")
-entry_user = tk.Entry(frame, width=30, font=("Segoe UI", 10))
+tk.Label(frame, text="Usuario o correo:", bg="#FFEBF7", 
+         font=("Century Gothic", 11)).grid(row=0, column=0, padx=5, pady=5, sticky="e")
+entry_user = tk.Entry(frame, width=30, font=("Century Gothic", 10))
 entry_user.grid(row=0, column=1, padx=5, pady=5)
 
 # Contraseña
-tk.Label(frame, text="Contraseña:", bg="#f5f7fb", font=("Segoe UI", 11)).grid(row=1, column=0, padx=5, pady=5, sticky="e")
-entry_contraseña = tk.Entry(frame, show="*", width=30, font=("Segoe UI", 10))
+tk.Label(frame, text="Contraseña:", bg="#FFEBF7", font=("Century Gothic", 11)).grid(row=1, column=0, padx=5, pady=5, sticky="e")
+entry_contraseña = tk.Entry(frame, show="*", width=30, font=("Century Gothic", 10))
 entry_contraseña.grid(row=1, column=1, padx=5, pady=5)
 
 # Botón de inicio de sesión
 btn_login = tk.Button(
     ventana,
     text="Iniciar sesión",
-    bg="#0078D7",
+    bg="#FF5AA4",
     fg="white",
-    font=("Segoe UI", 11, "bold"),
+    activebackground="#C2185B",
+    font=("Century Gothic", 11, "bold"),
     relief="flat",
     padx=12,
     pady=6,
@@ -98,9 +100,10 @@ btn_login.pack(pady=25)
 btn_volver = tk.Button(
     ventana,
     text="Volver al menú",
-    bg="#6C757D",
+    bg="#F70071",
     fg="white",
-    font=("Segoe UI", 10, "bold"),
+    activebackground="#C2185B",
+    font=("Century Gothic", 10, "bold"),
     relief="flat",
     padx=10,
     pady=5,
@@ -109,5 +112,3 @@ btn_volver = tk.Button(
 btn_volver.pack(pady=5)
 
 ventana.mainloop()
-
-
